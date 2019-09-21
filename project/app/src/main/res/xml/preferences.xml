@@ -42,6 +42,14 @@
 
         <SwitchPreference
             app:defaultValue="true"
+            app:dialogTitle="@string/fast_scroll_pref_title"
+            app:key="@string/fast_scroll_pref"
+            app:title="@string/fast_scroll_pref_title"
+            app:summaryOn="@string/fast_scroll_pref_summary_on"
+            android:summaryOff="@string/fast_scroll_pref_summary_off"/>
+
+        <SwitchPreference
+            app:defaultValue="true"
             app:dialogTitle="@string/search_bar_pref_title"
             app:key="@string/search_bar_pref"
             app:title="@string/search_bar_pref_title"

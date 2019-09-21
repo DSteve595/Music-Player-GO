@@ -125,11 +125,13 @@ class ArtistsFragment : Fragment() {
                 }
             }
 
-            //indicator fast scroller view
-            mIndicatorFastScrollerView = fastscroller
-            mIndicatorFastScrollThumb = fastscroller_thumb
+            if (musicPlayerGoExAppPreferences.isFastScrollEnabled) {
+                //indicator fast scroller view
+                mIndicatorFastScrollerView = fastscroller
+                mIndicatorFastScrollThumb = fastscroller_thumb
 
-            setupIndicatorFastScrollerView()
+                setupIndicatorFastScrollerView()
+            }
 
             if (isSearchBarEnabled) {
                 val searchView = itemSearch.actionView as SearchView
