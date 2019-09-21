@@ -48,5 +48,11 @@
     <string name="search_bar_pref_summary_on">Disable search bar</string>
     <string name="search_bar_pref_summary_off">Enable search bar</string>
 
+    <string name="artists_sorting_pref" translatable="false">artists_sorting_pref</string>
+    <string name="folders_sorting_pref" translatable="false">folders_sorting_pref</string>
+    <string name="sorting_pref_default">Default</string>
+    <string name="sorting_pref_ascending">Ascending</string>
+    <string name="sorting_pref_descending">Descending</string>
+
     <string name="hex" translatable="false">&#35;%06X</string>
 </resources>

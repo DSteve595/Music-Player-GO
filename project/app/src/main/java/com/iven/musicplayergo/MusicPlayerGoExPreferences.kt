@@ -11,6 +11,8 @@ class MusicPlayerGoExPreferences(context: Context) {
     private val prefsAccent = context.getString(R.string.accent_pref)
     private val prefsFastScroll = context.getString(R.string.fast_scroll_pref)
     private val prefsSearchBar = context.getString(R.string.search_bar_pref)
+    private val prefsArtistsSorting = context.getString(R.string.artists_sorting_pref)
+    private val prefsFoldersSorting = context.getString(R.string.folders_sorting_pref)
 
     private val mPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -29,5 +31,13 @@ class MusicPlayerGoExPreferences(context: Context) {
     var isSearchBarEnabled: Boolean
         get() = mPrefs.getBoolean(prefsSearchBar, true)
         set(value) = mPrefs.edit().putBoolean(prefsSearchBar, value).apply()
+
+    var artistsSorting: Int
+        get() = mPrefs.getInt(prefsArtistsSorting, R.id.ascending_sorting)
+        set(value) = mPrefs.edit().putInt(prefsArtistsSorting, value).apply()
+
+    var foldersSorting: Int
+        get() = mPrefs.getInt(prefsFoldersSorting, R.id.default_sorting)
+        set(value) = mPrefs.edit().putInt(prefsFoldersSorting, value).apply()
 }
 

@@ -5,7 +5,9 @@ import android.content.Context
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import com.afollestad.recyclical.datasource.DataSource
+import com.iven.musicplayergo.R
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
+import java.util.*
 
 
 object Utils {
@@ -60,6 +62,30 @@ object Utils {
 
         if (results.size > 0) {
             dataSource.set(results)
+        }
+    }
+
+    @JvmStatic
+    fun getSorting(
+        id: Int,
+        list: MutableList<String>,
+        defaultList: MutableList<String>
+    ): MutableList<String> {
+        return when (id) {
+
+            R.id.ascending_sorting -> {
+
+                Collections.sort(list, String.CASE_INSENSITIVE_ORDER)
+                list
+            }
+
+            R.id.descending_sorting -> {
+
+                Collections.sort(list, String.CASE_INSENSITIVE_ORDER)
+                list.asReversed()
+            }
+
+            else -> defaultList
         }
     }
 }

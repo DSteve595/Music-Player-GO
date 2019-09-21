@@ -59,7 +59,7 @@ class AllMusicFragment : Fragment() {
         if (context != null) {
 
             val searchToolbar = search_toolbar
-            searchToolbar.inflateMenu(R.menu.menu_search)
+            searchToolbar.inflateMenu(R.menu.menu_search_songs)
             searchToolbar.title = getString(R.string.music)
             val itemSearch = searchToolbar.menu.findItem(R.id.action_search)
 

@@ -10,8 +10,10 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
@@ -27,7 +29,6 @@ import com.reddit.indicatorfastscroll.FastScrollerThumbView
 import com.reddit.indicatorfastscroll.FastScrollerView
 import kotlinx.android.synthetic.main.fragment_artists.*
 import kotlinx.android.synthetic.main.search_toolbar.*
-import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -38,12 +39,14 @@ class ArtistsFragment : Fragment() {
 
     //views
     private lateinit var mArtistsRecyclerView: RecyclerView
+    private lateinit var mSearchToolbar: Toolbar
 
     //indicator fast scroller by reddit
     private lateinit var mIndicatorFastScrollerView: FastScrollerView
     private lateinit var mIndicatorFastScrollThumb: FastScrollerThumbView
 
     private lateinit var mArtists: MutableList<String>
+    private lateinit var mDataSource: DataSource<Any>
     private var mSelectedArtist = ""
 
     private lateinit var mSongsSheetInterface: SongsSheetInterface
@@ -71,25 +74,31 @@ class ArtistsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (context != null) {
-            val searchToolbar = search_toolbar
-            searchToolbar.inflateMenu(R.menu.menu_search)
-            searchToolbar.title = getString(R.string.artists)
-            val itemSearch = searchToolbar.menu.findItem(R.id.action_search)
+            mSearchToolbar = search_toolbar
+            mSearchToolbar.inflateMenu(R.menu.menu_search)
+            mSearchToolbar.title = getString(R.string.artists)
+
+            val itemSearch = mSearchToolbar.menu.findItem(R.id.action_search)
 
             val isSearchBarEnabled = musicPlayerGoExAppPreferences.isSearchBarEnabled
             itemSearch.isVisible = isSearchBarEnabled
 
+            setMenuOnItemClickListener()
+
             mArtistsRecyclerView = artists_rv
 
-            mArtists = musicLibrary.allCategorizedMusic.keys.toMutableList()
-            Collections.sort(mArtists, String.CASE_INSENSITIVE_ORDER)
+            mArtists = Utils.getSorting(
+                musicPlayerGoExAppPreferences.artistsSorting,
+                musicLibrary.allCategorizedMusic.keys.toMutableList(),
+                musicLibrary.allCategorizedMusic.keys.toMutableList()
+            )
 
-            val dataSource = dataSourceOf(mArtists)
+            mDataSource = dataSourceOf(mArtists)
 
             // setup{} is an extension method on RecyclerView
             mArtistsRecyclerView.setup {
                 // item is a `val` in `this` here
-                withDataSource(dataSource)
+                withDataSource(mDataSource)
                 withItem<String, GenericViewHolder>(R.layout.recycler_view_main_item) {
                     onBind(::GenericViewHolder) { _, item ->
                         // GenericViewHolder is `this` here
@@ -135,7 +144,7 @@ class ArtistsFragment : Fragment() {
 
             if (isSearchBarEnabled) {
                 val searchView = itemSearch.actionView as SearchView
-                Utils.setupSearchViewForStringLists(searchView, mArtists, dataSource)
+                Utils.setupSearchViewForStringLists(searchView, mArtists, mDataSource)
             }
         }
     }
@@ -200,6 +209,23 @@ class ArtistsFragment : Fragment() {
             } else {
                 mIndicatorFastScrollerView.visibility = View.GONE
             }
+        }
+    }
+
+    private fun setMenuOnItemClickListener() {
+        mSearchToolbar.setOnMenuItemClickListener {
+
+            mArtists = Utils.getSorting(
+                it.itemId,
+                mArtists,
+                musicLibrary.allCategorizedMusic.keys.toMutableList()
+            )
+
+            mDataSource.set(mArtists)
+
+            musicPlayerGoExAppPreferences.artistsSorting = it.itemId
+
+            return@setOnMenuItemClickListener true
         }
     }
 

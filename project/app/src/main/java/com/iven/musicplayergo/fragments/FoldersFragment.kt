@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.withItem
@@ -30,7 +32,11 @@ class FoldersFragment : Fragment() {
 
     private lateinit var mSongsSheetInterface: SongsSheetInterface
 
+    private lateinit var mFolders: MutableList<String>
+    private lateinit var mDataSource: DataSource<Any>
     private var mSelectedFolder = ""
+
+    private lateinit var mSearchToolbar: Toolbar
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,20 +62,27 @@ class FoldersFragment : Fragment() {
 
         if (context != null) {
 
-            val searchToolbar = search_toolbar
-            searchToolbar.inflateMenu(R.menu.menu_search)
-            searchToolbar.title = getString(R.string.folders)
-            val itemSearch = searchToolbar.menu.findItem(R.id.action_search)
+            mSearchToolbar = search_toolbar
+            mSearchToolbar.inflateMenu(R.menu.menu_search)
+            mSearchToolbar.title = getString(R.string.folders)
+            val itemSearch = mSearchToolbar.menu.findItem(R.id.action_search)
 
             val isSearchBarEnabled = musicPlayerGoExAppPreferences.isSearchBarEnabled
             itemSearch.isVisible = isSearchBarEnabled
 
-            val folders = musicLibrary.allCategorizedMusicByFolder.keys.toMutableList()
-            val dataSource = dataSourceOf(folders)
+            setMenuOnItemClickListener()
+
+            mFolders = Utils.getSorting(
+                musicPlayerGoExAppPreferences.foldersSorting,
+                musicLibrary.allCategorizedMusicByFolder.keys.toMutableList(),
+                musicLibrary.allCategorizedMusicByFolder.keys.toMutableList()
+            )
+
+            mDataSource = dataSourceOf(mFolders)
 
             // setup{} is an extension method on RecyclerView
             folders_rv.setup {
-                withDataSource(dataSource)
+                withDataSource(mDataSource)
                 withItem<String, GenericViewHolder>(R.layout.recycler_view_main_item) {
                     onBind(::GenericViewHolder) { _, item ->
 
@@ -105,7 +118,7 @@ class FoldersFragment : Fragment() {
 
             if (isSearchBarEnabled) {
                 val searchView = itemSearch.actionView as SearchView
-                Utils.setupSearchViewForStringLists(searchView, folders, dataSource)
+                Utils.setupSearchViewForStringLists(searchView, mFolders, mDataSource)
             }
         }
     }
@@ -115,6 +128,23 @@ class FoldersFragment : Fragment() {
         val songRootPath =
             musicLibrary.allCategorizedMusicByFolder.getValue(item)[0].path
         return File(songRootPath!!).parentFile?.parent.toString()
+    }
+
+    private fun setMenuOnItemClickListener() {
+        mSearchToolbar.setOnMenuItemClickListener {
+
+            mFolders = Utils.getSorting(
+                it.itemId,
+                mFolders,
+                musicLibrary.allCategorizedMusicByFolder.keys.toMutableList()
+            )
+
+            mDataSource.set(mFolders)
+
+            musicPlayerGoExAppPreferences.foldersSorting = it.itemId
+
+            return@setOnMenuItemClickListener true
+        }
     }
 
     companion object {
