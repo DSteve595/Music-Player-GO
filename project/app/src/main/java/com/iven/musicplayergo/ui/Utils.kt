@@ -2,19 +2,27 @@ package com.iven.musicplayergo.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.Toast
+import android.graphics.Color
 import androidx.appcompat.widget.SearchView
 import com.afollestad.recyclical.datasource.DataSource
 import com.iven.musicplayergo.R
+import com.iven.musicplayergo.musicPlayerGoExAppPreferences
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import java.util.*
-
 
 object Utils {
 
     @JvmStatic
     fun makeUnknownErrorToast(context: Context, message: Int) {
-        DynamicToast.makeError(context, context.getString(message), Toast.LENGTH_LONG)
+        val errorColor = ThemeHelper.getColor(context, R.color.red, R.color.red)
+        val tintColor = if (ThemeHelper.isThemeNight()) Color.BLACK else Color.WHITE
+        DynamicToast.make(
+            context,
+            context.getString(message),
+            context.getDrawable(R.drawable.ic_error),
+            tintColor,
+            errorColor
+        )
             .show()
     }
 
@@ -66,7 +74,7 @@ object Utils {
     }
 
     @JvmStatic
-    fun getSorting(
+    fun getSortedList(
         id: Int,
         list: MutableList<String>,
         defaultList: MutableList<String>
@@ -87,5 +95,17 @@ object Utils {
 
             else -> defaultList
         }
+    }
+
+    @JvmStatic
+    fun addToHiddenItems(item: String) {
+        val hiddenArtistsFolders = musicPlayerGoExAppPreferences.hiddenItems?.toMutableList()
+        hiddenArtistsFolders?.add(item)
+        musicPlayerGoExAppPreferences.hiddenItems = hiddenArtistsFolders?.toSet()
+    }
+
+    @JvmStatic
+    fun removeHiddenItems(newItems: Set<String>) {
+        musicPlayerGoExAppPreferences.hiddenItems = newItems
     }
 }

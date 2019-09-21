@@ -82,6 +82,7 @@ class MusicLibrary {
                             audioAlbumId
                         )
                     )
+
                 } while (musicCursor.moveToNext())
                 musicCursor.close()
             }

@@ -91,7 +91,7 @@ object MusicUtils {
                     Album(
                         it,
                         getYearForAlbum(resources, albumSongs[0].year),
-                        albumSongs
+                        albumSongs.toMutableList()
                     )
                 )
             }
@@ -99,6 +99,7 @@ object MusicUtils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
         sortedAlbums.sortBy { it.year }
         return sortedAlbums
     }

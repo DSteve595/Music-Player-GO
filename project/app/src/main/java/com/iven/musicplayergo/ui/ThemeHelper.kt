@@ -26,6 +26,11 @@ object ThemeHelper {
     }
 
     @JvmStatic
+    fun isThemeNight(): Boolean {
+        return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+    }
+
+    @JvmStatic
     fun darkenColor(color: Int, factor: Float): Int {
         return ColorUtils.blendARGB(color, Color.BLACK, factor)
     }

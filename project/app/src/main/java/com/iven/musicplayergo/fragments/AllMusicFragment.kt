@@ -18,7 +18,7 @@ import com.iven.musicplayergo.music.Music
 import com.iven.musicplayergo.musicLibrary
 import com.iven.musicplayergo.musicPlayerGoExAppPreferences
 import com.iven.musicplayergo.ui.GenericViewHolder
-import com.iven.musicplayergo.ui.SongsSheetInterface
+import com.iven.musicplayergo.ui.UIControlInterface
 import kotlinx.android.synthetic.main.fragment_all_music.*
 import kotlinx.android.synthetic.main.search_toolbar.*
 
@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.search_toolbar.*
  */
 class AllMusicFragment : Fragment() {
 
-    private lateinit var mSongsSheetInterface: SongsSheetInterface
+    private lateinit var mUIControlInterface: UIControlInterface
 
     private lateinit var mAllMusic: List<Music>
     private lateinit var mDataSource: DataSource<Any>
@@ -39,7 +39,7 @@ class AllMusicFragment : Fragment() {
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mSongsSheetInterface = activity as SongsSheetInterface
+            mUIControlInterface = activity as UIControlInterface
         } catch (e: ClassCastException) {
             throw ClassCastException(activity.toString() + " must implement MyInterface ")
         }
@@ -82,7 +82,7 @@ class AllMusicFragment : Fragment() {
                     }
 
                     onClick {
-                        mSongsSheetInterface.onSongSelected(item)
+                        mUIControlInterface.onSongSelected(item)
                     }
 
                     onLongClick { index ->

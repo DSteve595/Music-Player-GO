@@ -16,13 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.swipe.SwipeLocation
+import com.afollestad.recyclical.swipe.withSwipeAction
 import com.afollestad.recyclical.withItem
 import com.iven.musicplayergo.R
 import com.iven.musicplayergo.music.MusicUtils
 import com.iven.musicplayergo.musicLibrary
 import com.iven.musicplayergo.musicPlayerGoExAppPreferences
 import com.iven.musicplayergo.ui.GenericViewHolder
-import com.iven.musicplayergo.ui.SongsSheetInterface
+import com.iven.musicplayergo.ui.UIControlInterface
 import com.iven.musicplayergo.ui.Utils
 import com.reddit.indicatorfastscroll.FastScrollItemIndicator
 import com.reddit.indicatorfastscroll.FastScrollerThumbView
@@ -49,14 +51,14 @@ class ArtistsFragment : Fragment() {
     private lateinit var mDataSource: DataSource<Any>
     private var mSelectedArtist = ""
 
-    private lateinit var mSongsSheetInterface: SongsSheetInterface
+    private lateinit var mUIControlInterface: UIControlInterface
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mSongsSheetInterface = activity as SongsSheetInterface
+            mUIControlInterface = activity as UIControlInterface
         } catch (e: ClassCastException) {
             throw ClassCastException(activity.toString() + " must implement MyInterface ")
         }
@@ -87,11 +89,15 @@ class ArtistsFragment : Fragment() {
 
             mArtistsRecyclerView = artists_rv
 
-            mArtists = Utils.getSorting(
+            mArtists = Utils.getSortedList(
                 musicPlayerGoExAppPreferences.artistsSorting,
                 musicLibrary.allCategorizedMusic.keys.toMutableList(),
                 musicLibrary.allCategorizedMusic.keys.toMutableList()
             )
+
+            musicPlayerGoExAppPreferences.hiddenItems?.iterator()?.forEach {
+                if (mArtists.contains(it)) mArtists.remove(it)
+            }
 
             mDataSource = dataSourceOf(mArtists)
 
@@ -107,13 +113,13 @@ class ArtistsFragment : Fragment() {
                     }
 
                     onClick {
-                        if (::mSongsSheetInterface.isInitialized) {
+                        if (::mUIControlInterface.isInitialized) {
 
                             if (mSelectedArtist != item) {
 
                                 mSelectedArtist = item
 
-                                mSongsSheetInterface.onPopulateAndShowSheet(
+                                mUIControlInterface.onPopulateAndShowSongsSheet(
                                     false,
                                     item,
                                     getArtistSubtitle(item),
@@ -123,13 +129,23 @@ class ArtistsFragment : Fragment() {
                                     )[0].music!!
                                 )
                             } else {
-                                mSongsSheetInterface.onShowSheet()
+                                mUIControlInterface.onShowSongsSheet()
                             }
                         }
                     }
                     onLongClick { index ->
                         // item is a `val` in `this` here
                         Log.d("doSomething", "Clicked $index: ${item}")
+                    }
+                }
+
+                withSwipeAction(SwipeLocation.RIGHT, SwipeLocation.LEFT) {
+                    icon(R.drawable.ic_hide)
+                    color(R.color.red)
+                    callback { _, item ->
+                        mArtists.remove(item)
+                        Utils.addToHiddenItems(item.toString())
+                        true
                     }
                 }
             }
@@ -215,7 +231,7 @@ class ArtistsFragment : Fragment() {
     private fun setMenuOnItemClickListener() {
         mSearchToolbar.setOnMenuItemClickListener {
 
-            mArtists = Utils.getSorting(
+            mArtists = Utils.getSortedList(
                 it.itemId,
                 mArtists,
                 musicLibrary.allCategorizedMusic.keys.toMutableList()

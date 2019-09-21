@@ -13,6 +13,7 @@ class MusicPlayerGoExPreferences(context: Context) {
     private val prefsSearchBar = context.getString(R.string.search_bar_pref)
     private val prefsArtistsSorting = context.getString(R.string.artists_sorting_pref)
     private val prefsFoldersSorting = context.getString(R.string.folders_sorting_pref)
+    private val prefsHiddenArtistsFolders = context.getString(R.string.hidden_items_pref)
 
     private val mPrefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -39,5 +40,9 @@ class MusicPlayerGoExPreferences(context: Context) {
     var foldersSorting: Int
         get() = mPrefs.getInt(prefsFoldersSorting, R.id.default_sorting)
         set(value) = mPrefs.edit().putInt(prefsFoldersSorting, value).apply()
+
+    var hiddenItems: Set<String>?
+        get() = mPrefs.getStringSet(prefsHiddenArtistsFolders, setOf())
+        set(value) = mPrefs.edit().putStringSet(prefsHiddenArtistsFolders, value).apply()
 }
 

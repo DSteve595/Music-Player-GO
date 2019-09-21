@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
@@ -38,14 +37,14 @@ import com.iven.musicplayergo.ui.*
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.songs_sheet.*
 
-class MainActivity : AppCompatActivity(), SongsSheetInterface {
+class MainActivity : AppCompatActivity(), UIControlInterface {
 
     //default
-    private lateinit var mArtistsFragment: Fragment
+    private lateinit var mArtistsFragment: ArtistsFragment
 
-    private lateinit var mAllMusicFragment: Fragment
-    private lateinit var mFoldersFragment: Fragment
-    private lateinit var mSettingsFragment: Fragment
+    private lateinit var mAllMusicFragment: AllMusicFragment
+    private lateinit var mFoldersFragment: FoldersFragment
+    private lateinit var mSettingsFragment: SettingsFragment
 
     private lateinit var mFragmentManager: FragmentManager
 
@@ -60,9 +59,6 @@ class MainActivity : AppCompatActivity(), SongsSheetInterface {
 
     private lateinit var mTheme: String
     private var mAccent = R.color.deepPurple
-
-    //music management
-
 
     // music shit related
     private val mMusicViewModel: MusicViewModel by lazy {
@@ -147,11 +143,10 @@ class MainActivity : AppCompatActivity(), SongsSheetInterface {
     private fun setupUI() {
 
         val mainActivity = main_activity
-        val isModeNight =
-            AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+
         val accent = ThemeHelper.getColor(this, mAccent, R.color.deepPurple)
         mainActivity.setBackgroundColor(
-            if (isModeNight)
+            if (ThemeHelper.isThemeNight())
                 ThemeHelper.darkenColor(accent, 0.90F) else ThemeHelper.lightenColor(accent, 0.95F)
         )
 
@@ -234,11 +229,11 @@ class MainActivity : AppCompatActivity(), SongsSheetInterface {
         mCoverView.visibility = visibility
     }
 
-    override fun onPopulateAndShowSheet(
+    override fun onPopulateAndShowSongsSheet(
         isFolder: Boolean,
         header: String,
         subheading: String,
-        songs: List<Music>
+        songs: MutableList<Music>
     ) {
 
         toggleBottomSheetVisibility(View.VISIBLE)
@@ -343,7 +338,7 @@ class MainActivity : AppCompatActivity(), SongsSheetInterface {
         }
     }
 
-    override fun onShowSheet() {
+    override fun onShowSongsSheet() {
         if (mBottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
             toggleBottomSheetVisibility(View.VISIBLE)
             mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -353,5 +348,9 @@ class MainActivity : AppCompatActivity(), SongsSheetInterface {
     override fun onSongSelected(song: Music) {
         Log.d(song.title, song.title!!)
         mSelectedAlbum = song.album!!
+    }
+
+    override fun onVisibleItemsUpdated() {
+        if (::mFoldersFragment.isInitialized) mFoldersFragment.updateFolders()
     }
 }

@@ -17,6 +17,7 @@
             android:id="@+id/artists_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="none"
             android:overScrollMode="never" />
 
         <com.reddit.indicatorfastscroll.FastScrollerView

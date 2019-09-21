@@ -2,14 +2,15 @@ package com.iven.musicplayergo.ui
 
 import com.iven.musicplayergo.music.Music
 
-interface SongsSheetInterface {
-    fun onPopulateAndShowSheet(
+interface UIControlInterface {
+    fun onPopulateAndShowSongsSheet(
         isFolder: Boolean,
         header: String,
         subheading: String,
-        songs: List<Music>
+        songs: MutableList<Music>
     )
 
-    fun onShowSheet()
+    fun onShowSongsSheet()
     fun onSongSelected(song: Music)
+    fun onVisibleItemsUpdated()
 }

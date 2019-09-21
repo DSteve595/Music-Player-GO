@@ -8,6 +8,11 @@
         <item name="md_font_title">@font/raleway_black</item>
         <item name="md_font_body">@font/raleway</item>
         <item name="md_font_button">@font/raleway_semibold</item>
+        <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
+    </style>
+
+    <style name="ActionButtonOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_sort</item>
     </style>
 
     <!-- This will set the fade in animation on all the activities by default -->

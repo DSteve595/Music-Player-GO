@@ -12,12 +12,14 @@ import androidx.fragment.app.Fragment
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
+import com.afollestad.recyclical.swipe.SwipeLocation
+import com.afollestad.recyclical.swipe.withSwipeAction
 import com.afollestad.recyclical.withItem
 import com.iven.musicplayergo.R
 import com.iven.musicplayergo.musicLibrary
 import com.iven.musicplayergo.musicPlayerGoExAppPreferences
 import com.iven.musicplayergo.ui.GenericViewHolder
-import com.iven.musicplayergo.ui.SongsSheetInterface
+import com.iven.musicplayergo.ui.UIControlInterface
 import com.iven.musicplayergo.ui.Utils
 import kotlinx.android.synthetic.main.fragment_folders.*
 import kotlinx.android.synthetic.main.search_toolbar.*
@@ -30,7 +32,7 @@ import java.io.File
  */
 class FoldersFragment : Fragment() {
 
-    private lateinit var mSongsSheetInterface: SongsSheetInterface
+    private lateinit var mUIControlInterface: UIControlInterface
 
     private lateinit var mFolders: MutableList<String>
     private lateinit var mDataSource: DataSource<Any>
@@ -38,12 +40,29 @@ class FoldersFragment : Fragment() {
 
     private lateinit var mSearchToolbar: Toolbar
 
+    fun updateFolders() {
+        setupFilteredFolders()
+        mDataSource.set(mFolders)
+    }
+
+    private fun setupFilteredFolders() {
+
+        mFolders = Utils.getSortedList(
+            musicPlayerGoExAppPreferences.foldersSorting,
+            musicLibrary.allCategorizedMusicByFolder.keys.toMutableList(),
+            musicLibrary.allCategorizedMusicByFolder.keys.toMutableList()
+        )
+        musicPlayerGoExAppPreferences.hiddenItems?.iterator()?.forEach {
+            if (mFolders.contains(it)) mFolders.remove(it)
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mSongsSheetInterface = activity as SongsSheetInterface
+            mUIControlInterface = activity as UIControlInterface
         } catch (e: ClassCastException) {
             throw ClassCastException(activity.toString() + " must implement MyInterface ")
         }
@@ -72,11 +91,7 @@ class FoldersFragment : Fragment() {
 
             setMenuOnItemClickListener()
 
-            mFolders = Utils.getSorting(
-                musicPlayerGoExAppPreferences.foldersSorting,
-                musicLibrary.allCategorizedMusicByFolder.keys.toMutableList(),
-                musicLibrary.allCategorizedMusicByFolder.keys.toMutableList()
-            )
+            setupFilteredFolders()
 
             mDataSource = dataSourceOf(mFolders)
 
@@ -94,17 +109,17 @@ class FoldersFragment : Fragment() {
 
                     onClick {
                         // item is a `val` in `this` here
-                        if (::mSongsSheetInterface.isInitialized) {
+                        if (::mUIControlInterface.isInitialized) {
 
                             if (mSelectedFolder != item) {
-                                mSongsSheetInterface.onPopulateAndShowSheet(
+                                mUIControlInterface.onPopulateAndShowSongsSheet(
                                     true,
                                     item,
                                     getString(R.string.in_directory, getParentFolder(item)),
-                                    musicLibrary.allCategorizedMusicByFolder.getValue(item)
+                                    musicLibrary.allCategorizedMusicByFolder.getValue(item).toMutableList()
                                 )
                             } else {
-                                mSongsSheetInterface.onShowSheet()
+                                mUIControlInterface.onShowSongsSheet()
                             }
                         }
                     }
@@ -112,6 +127,16 @@ class FoldersFragment : Fragment() {
                     onLongClick { index ->
                         // item is a `val` in `this` here
                         Log.d("doSomething", "Clicked $index: ${item}")
+                    }
+                }
+
+                withSwipeAction(SwipeLocation.RIGHT, SwipeLocation.LEFT) {
+                    icon(R.drawable.ic_hide)
+                    color(R.color.red)
+                    callback { _, item ->
+                        mFolders.remove(item)
+                        Utils.addToHiddenItems(item.toString())
+                        true
                     }
                 }
             }
@@ -133,7 +158,7 @@ class FoldersFragment : Fragment() {
     private fun setMenuOnItemClickListener() {
         mSearchToolbar.setOnMenuItemClickListener {
 
-            mFolders = Utils.getSorting(
+            mFolders = Utils.getSortedList(
                 it.itemId,
                 mFolders,
                 musicLibrary.allCategorizedMusicByFolder.keys.toMutableList()
