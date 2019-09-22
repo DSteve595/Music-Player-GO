@@ -20,7 +20,6 @@ class HiddenItemsAdapter :
     }
 
     fun getUpdatedHiddenItems(): Set<String> {
-
         return mHiddenItems.toSet()
     }
 
@@ -48,16 +47,13 @@ class HiddenItemsAdapter :
 
             val title = itemView.findViewById<TextView>(R.id.title)
             title.text = item
+            title.isSelected = true
 
             val checkBox = itemView.findViewById<CheckBox>(R.id.checkbox)
 
             itemView.setOnClickListener {
-
-                it.isSelected = !it.isSelected
-                checkBox.isChecked = it.isSelected
-                checkBox.isSelected = it.isSelected
-
-                if (checkBox.isSelected) mHiddenItems.remove(item) else mHiddenItems.add(item)
+                checkBox.isChecked = !checkBox.isChecked
+                if (checkBox.isChecked) mHiddenItems.remove(item) else mHiddenItems.add(item)
             }
         }
     }
