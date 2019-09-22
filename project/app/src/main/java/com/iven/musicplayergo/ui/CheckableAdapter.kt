@@ -17,15 +17,11 @@ class CheckableAdapter(
 ) :
     RecyclerView.Adapter<CheckableAdapter.HiddenItemsHolder>() {
 
-    private val mCheckableItems: MutableList<String>
-
-    init {
-        if (isHiddenItemsDialog) {
-            listItems.sort()
-            mCheckableItems = listItems
-        } else {
-            mCheckableItems = musicPlayerGoExAppPreferences.activeFragments!!.toMutableList()
-        }
+    private val mCheckableItems = if (isHiddenItemsDialog) {
+        listItems.sort()
+        listItems
+    } else {
+        musicPlayerGoExAppPreferences.activeFragments!!.toMutableList()
     }
 
     fun getUpdatedItems(): Set<String> {
