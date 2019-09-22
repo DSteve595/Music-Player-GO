@@ -2,9 +2,7 @@ package com.iven.musicplayergo.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +18,7 @@ import com.afollestad.recyclical.setup
 import com.afollestad.recyclical.swipe.SwipeLocation
 import com.afollestad.recyclical.swipe.withSwipeAction
 import com.afollestad.recyclical.withItem
+import com.google.android.material.snackbar.Snackbar
 import com.iven.musicplayergo.R
 import com.iven.musicplayergo.music.MusicUtils
 import com.iven.musicplayergo.musicLibrary
@@ -135,10 +134,6 @@ class ArtistsFragment : Fragment() {
                             }
                         }
                     }
-                    onLongClick { index ->
-                        // item is a `val` in `this` here
-                        Log.d("doSomething", "Clicked $index: ${item}")
-                    }
                 }
 
                 withSwipeAction(SwipeLocation.RIGHT, SwipeLocation.LEFT) {
@@ -149,9 +144,23 @@ class ArtistsFragment : Fragment() {
                         typefaceRes = R.font.raleway_black,
                         color = if (ThemeHelper.isThemeNight()) android.R.color.black else android.R.color.white
                     )
-                    callback { _, item ->
-                        mArtists.remove(item)
-                        Utils.addToHiddenItems(item.toString())
+                    callback { index, item ->
+
+                        val hiddenItem = item.toString()
+
+                        mArtists.remove(hiddenItem)
+                        Utils.addToHiddenItems(hiddenItem)
+
+                        Snackbar.make(
+                            context_view,
+                            getString(R.string.hidden_item_pref_result, hiddenItem),
+                            Snackbar.LENGTH_LONG
+                        ).setAction(R.string.hidden_items_pref_undo) {
+                            mArtists.add(index, hiddenItem)
+                            mDataSource.set(mArtists)
+                            Utils.removeFromHiddenItems(hiddenItem)
+                        }.show()
+
                         true
                     }
                 }
