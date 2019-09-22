@@ -9,6 +9,10 @@ class MusicPlayerGoExPreferences(context: Context) {
     private val prefsTheme = context.getString(R.string.theme_pref)
     private val prefsThemeDefault = context.getString(R.string.theme_pref_light)
     private val prefsAccent = context.getString(R.string.accent_pref)
+    private val prefsActiveFragments = context.getString(R.string.active_fragments_pref)
+    private val prefsActiveFragmentsDefault =
+        context.resources.getStringArray(R.array.activeFragmentsEntryArray).toMutableSet()
+
     private val prefsFastScroll = context.getString(R.string.fast_scroll_pref)
     private val prefsSearchBar = context.getString(R.string.search_bar_pref)
     private val prefsArtistsSorting = context.getString(R.string.artists_sorting_pref)
@@ -24,6 +28,10 @@ class MusicPlayerGoExPreferences(context: Context) {
     var accent: Int
         get() = mPrefs.getInt(prefsAccent, R.color.deepPurple)
         set(value) = mPrefs.edit().putInt(prefsAccent, value).apply()
+
+    var activeFragments: Set<String>?
+        get() = mPrefs.getStringSet(prefsActiveFragments, prefsActiveFragmentsDefault)
+        set(value) = mPrefs.edit().putStringSet(prefsActiveFragments, value).apply()
 
     var isFastScrollEnabled: Boolean
         get() = mPrefs.getBoolean(prefsFastScroll, true)

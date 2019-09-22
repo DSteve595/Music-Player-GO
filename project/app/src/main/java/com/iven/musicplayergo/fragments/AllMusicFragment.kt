@@ -36,6 +36,7 @@ class AllMusicFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {

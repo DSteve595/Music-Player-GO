@@ -38,6 +38,11 @@
     <PreferenceCategory
         app:title="@string/category_general">
 
+        <Preference
+            app:dialogTitle="@string/active_fragments_pref_title"
+            app:key="@string/active_fragments_pref"
+            app:title="@string/active_fragments_pref_title" />
+
         <SwitchPreference
             app:defaultValue="true"
             app:dialogTitle="@string/fast_scroll_pref_title"

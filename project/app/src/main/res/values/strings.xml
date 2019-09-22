@@ -36,7 +36,11 @@
     <string name="theme_pref_auto" translatable="false">theme_pref_auto</string>
 
     <string name="accent_pref" translatable="false">accent_pref</string>
-    <string name="accent_pref_title" translatable="false">Accent</string>
+    <string name="accent_pref_title">Accent</string>
+
+    <string name="active_fragments_pref" translatable="false">active_fragments_pref</string>
+    <string name="active_fragments_pref_title">Active tabs</string>
+    <string name="active_fragments_pref_warning">You just can\'t remove all tabs! :P</string>
 
     <string name="fast_scroll_pref" translatable="false">fast_scroll_pref</string>
     <string name="fast_scroll_pref_title">Indicator fast scroll</string>

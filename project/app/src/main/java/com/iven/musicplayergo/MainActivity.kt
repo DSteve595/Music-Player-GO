@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
 
     private lateinit var mFragmentManager: FragmentManager
 
-    private lateinit var mActiveFragment: Fragment
+    private lateinit var mFragmentsNumbersToAdd: MutableList<String>
 
     private lateinit var mPager: ViewPager
     private lateinit var mTabLayout: TabLayout
@@ -67,18 +67,6 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
 
     private lateinit var mSelectedAlbum: String
     private lateinit var mAlbumSongsDataSource: DataSource<Any>
-
-    private fun handleOnNavigationItemSelected(itemId: Int): Fragment {
-
-        when (itemId) {
-            0 -> mActiveFragment = mArtistsFragment
-            1 -> mActiveFragment = mAllMusicFragment
-            2 -> mActiveFragment = mFoldersFragment
-            3 -> mActiveFragment = mSettingsFragment
-        }
-
-        return mActiveFragment
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -133,7 +121,12 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
                 )
             }
             negativeButton {
-                Utils.makeUnknownErrorToast(this@MainActivity, R.string.perm_rationale)
+                Utils.makeToast(
+                    this@MainActivity,
+                    R.string.perm_rationale,
+                    R.drawable.ic_error,
+                    R.color.red
+                )
                 dismiss()
                 finishAndRemoveTask()
             }
@@ -155,11 +148,13 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
             if (hasLoaded) {
 
                 mArtistsFragment = ArtistsFragment.newInstance()
-                mActiveFragment = mArtistsFragment
 
                 mAllMusicFragment = AllMusicFragment.newInstance()
                 mFoldersFragment = FoldersFragment.newInstance()
                 mSettingsFragment = SettingsFragment.newInstance()
+
+                mFragmentsNumbersToAdd =
+                    musicPlayerGoExAppPreferences.activeFragments?.toMutableList()!!
 
                 mPager = pager
 
@@ -193,22 +188,39 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
             val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager)
             mPager.adapter = pagerAdapter
 
-            setupTabLayoutTabs(0)
-            setupTabLayoutTabs(1)
-            setupTabLayoutTabs(2)
-            setupTabLayoutTabs(3)
+            mFragmentsNumbersToAdd.iterator().forEach {
+                setupTabLayoutTabs(mFragmentsNumbersToAdd.indexOf(it), it.toInt())
+            }
         })
     }
 
-    private fun setupTabLayoutTabs(index: Int) {
-        val icons = arrayListOf(
-            R.drawable.ic_person,
-            R.drawable.ic_music,
-            R.drawable.ic_folder,
-            R.drawable.ic_settings
-        )
+    private fun handleOnNavigationItemSelected(itemId: Int): Fragment {
 
-        mTabLayout.getTabAt(index)?.setIcon(icons[index])
+        return when (itemId) {
+            0 -> getFragmentForIndex(mFragmentsNumbersToAdd[0].toInt())
+            1 -> getFragmentForIndex(mFragmentsNumbersToAdd[1].toInt())
+            2 -> getFragmentForIndex(mFragmentsNumbersToAdd[2].toInt())
+            else -> getFragmentForIndex(mFragmentsNumbersToAdd[3].toInt())
+        }
+    }
+
+    private fun getFragmentForIndex(index: Int): Fragment {
+        return when (index) {
+            0 -> mArtistsFragment
+            1 -> mAllMusicFragment
+            2 -> mFoldersFragment
+            else -> mSettingsFragment
+        }
+    }
+
+    private fun setupTabLayoutTabs(tabIndex: Int, iconIndex: Int) {
+        val icon = when (iconIndex) {
+            0 -> R.drawable.ic_person
+            1 -> R.drawable.ic_music
+            2 -> R.drawable.ic_folder
+            else -> R.drawable.ic_settings
+        }
+        mTabLayout.getTabAt(tabIndex)?.setIcon(icon)
     }
 
     /**
@@ -217,7 +229,7 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
      */
     private inner class ScreenSlidePagerAdapter(fm: FragmentManager) :
         FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getCount(): Int = 4
+        override fun getCount(): Int = mFragmentsNumbersToAdd.size
 
         override fun getItem(position: Int): Fragment {
             return handleOnNavigationItemSelected(position)

@@ -41,25 +41,9 @@ class FoldersFragment : Fragment() {
 
     private lateinit var mSearchToolbar: Toolbar
 
-    fun updateFolders() {
-        setupFilteredFolders()
-        mDataSource.set(mFolders)
-    }
-
-    private fun setupFilteredFolders() {
-
-        mFolders = Utils.getSortedList(
-            musicPlayerGoExAppPreferences.foldersSorting,
-            musicLibrary.allCategorizedMusicByFolder.keys.toMutableList(),
-            musicLibrary.allCategorizedMusicByFolder.keys.toMutableList()
-        )
-        musicPlayerGoExAppPreferences.hiddenItems?.iterator()?.forEach {
-            if (mFolders.contains(it)) mFolders.remove(it)
-        }
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
@@ -185,6 +169,25 @@ class FoldersFragment : Fragment() {
             musicPlayerGoExAppPreferences.foldersSorting = it.itemId
 
             return@setOnMenuItemClickListener true
+        }
+    }
+
+    fun updateFolders() {
+        if (::mDataSource.isInitialized) {
+            setupFilteredFolders()
+            mDataSource.set(mFolders)
+        }
+    }
+
+    private fun setupFilteredFolders() {
+
+        mFolders = Utils.getSortedList(
+            musicPlayerGoExAppPreferences.foldersSorting,
+            musicLibrary.allCategorizedMusicByFolder.keys.toMutableList(),
+            musicLibrary.allCategorizedMusicByFolder.keys.toMutableList()
+        )
+        musicPlayerGoExAppPreferences.hiddenItems?.iterator()?.forEach {
+            if (mFolders.contains(it)) mFolders.remove(it)
         }
     }
 

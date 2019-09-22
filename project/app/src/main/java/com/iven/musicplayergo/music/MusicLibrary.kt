@@ -98,9 +98,11 @@ class MusicLibrary {
             categorizeMusicByFolder(allSongsFiltered)
 
         } catch (e: Exception) {
-            Utils.makeUnknownErrorToast(
+            Utils.makeToast(
                 context,
-                R.string.error_unknown
+                R.string.error_unknown,
+                R.drawable.ic_warning,
+                R.color.yellow
             )
             e.printStackTrace()
         }

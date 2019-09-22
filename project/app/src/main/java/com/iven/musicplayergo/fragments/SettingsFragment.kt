@@ -28,7 +28,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
             search_toolbar.title = getString(R.string.settings)
-            activity!!.supportFragmentManager.beginTransaction()
+            childFragmentManager.beginTransaction()
                 .replace(
                     R.id.fragment_layout,
                     PreferencesFragment.newInstance(), PreferencesFragment.TAG

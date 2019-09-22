@@ -244,7 +244,7 @@ object MusicUtils {
                 cursor.close()
             }
         } catch (e: Exception) {
-            Utils.makeUnknownErrorToast(context, R.string.error_unknown)
+            Utils.makeToast(context, R.string.error_unknown, R.drawable.ic_warning, R.color.yellow)
             e.printStackTrace()
         }
         return returnedString

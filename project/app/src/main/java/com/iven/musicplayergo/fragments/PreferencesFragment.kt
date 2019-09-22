@@ -2,10 +2,7 @@ package com.iven.musicplayergo.fragments
 
 import android.content.Context
 import android.os.Bundle
-import androidx.preference.ListPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
+import androidx.preference.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.getRecyclerView
@@ -16,7 +13,7 @@ import com.iven.musicplayergo.ui.*
 class PreferencesFragment : PreferenceFragmentCompat() {
 
     private lateinit var mAccentsDialog: MaterialDialog
-    private lateinit var mHiddenItemsDialog: MaterialDialog
+    private lateinit var mMultiListDialog: MaterialDialog
 
     private var mSelectedAccent = R.color.deepPurple
 
@@ -58,6 +55,27 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 return@setOnPreferenceClickListener true
             }
 
+            val activeTabsPreference = findPreference<Preference>("active_fragments_pref")
+
+            activeTabsPreference?.setOnPreferenceClickListener {
+                showActiveFragmentsDialog()
+                return@setOnPreferenceClickListener true
+            }
+
+            activeTabsPreference?.setOnPreferenceChangeListener { preference, newValue ->
+                if (preference.key == "3") {
+                    val checkBoxPreference = preference as CheckBoxPreference
+                    checkBoxPreference.isChecked = true
+                    Utils.makeToast(
+                        activity!!,
+                        R.string.active_fragments_pref,
+                        R.drawable.ic_error,
+                        R.color.red
+                    )
+                }
+                return@setOnPreferenceChangeListener true
+            }
+
             val searchBarPreference = findPreference<SwitchPreference>("search_bar_pref")
             searchBarPreference?.setOnPreferenceChangeListener { _, _ ->
                 ThemeHelper.applyNewThemeSmoothly(activity!!)
@@ -66,9 +84,13 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
             val hiddenItemsPreference = findPreference<Preference>("hidden_items_pref")
             hiddenItemsPreference?.setOnPreferenceClickListener {
-                if (musicPlayerGoExAppPreferences.hiddenItems?.isNotEmpty()!!) showHiddenItemsDialog(
-                    it
-                ) else Utils.makeUnknownErrorToast(activity!!, R.string.hidden_items_pref_empty)
+                if (musicPlayerGoExAppPreferences.hiddenItems?.isNotEmpty()!!) showHiddenItemsDialog()
+                else Utils.makeToast(
+                    activity!!,
+                    R.string.hidden_items_pref_empty,
+                    R.drawable.ic_warning,
+                    R.color.yellow
+                )
                 return@setOnPreferenceClickListener true
             }
         }
@@ -91,20 +113,42 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun showHiddenItemsDialog(hiddenItemsPreference: Preference) {
+    private fun showActiveFragmentsDialog() {
         if (activity != null) {
-            mHiddenItemsDialog = MaterialDialog(activity!!).show {
+            mMultiListDialog = MaterialDialog(activity!!).show {
                 cornerRadius(res = R.dimen.md_radius)
-                title(text = hiddenItemsPreference.title.toString())
-                val hiddenItemsAdapter = HiddenItemsAdapter()
-                customListAdapter(hiddenItemsAdapter)
+                title(R.string.active_fragments_pref_title)
+                val checkableAdapter = CheckableAdapter(
+                    activity!!,
+                    resources.getStringArray(R.array.activeFragmentsListArray).toMutableList(),
+                    false
+                )
+                customListAdapter(checkableAdapter)
                 positiveButton {
-                    Utils.removeHiddenItems(hiddenItemsAdapter.getUpdatedHiddenItems())
+                    Utils.removeCheckableItems(checkableAdapter.getUpdatedItems(), false)
+                    ThemeHelper.applyNewThemeSmoothly(activity!!)
+                }
+                negativeButton {}
+            }
+        }
+    }
+
+    private fun showHiddenItemsDialog() {
+        if (activity != null) {
+            mMultiListDialog = MaterialDialog(activity!!).show {
+                cornerRadius(res = R.dimen.md_radius)
+                title(R.string.hidden_items_pref_title)
+                val checkableAdapter = CheckableAdapter(
+                    activity!!,
+                    musicPlayerGoExAppPreferences.hiddenItems!!.toMutableList(),
+                    true
+                )
+                customListAdapter(checkableAdapter)
+                positiveButton {
+                    Utils.removeCheckableItems(checkableAdapter.getUpdatedItems(), true)
                     mUIControlInterface.onVisibleItemsUpdated()
                 }
-                negativeButton (res = R.string.hidden_items_pref_wipe) {
-                    Utils.removeHiddenItems(setOf())
-                }
+                negativeButton {}
             }
         }
     }
@@ -112,7 +156,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     override fun onPause() {
         super.onPause()
         if (::mAccentsDialog.isInitialized && mAccentsDialog.isShowing) mAccentsDialog.dismiss()
-        if (::mHiddenItemsDialog.isInitialized && mHiddenItemsDialog.isShowing) mHiddenItemsDialog.dismiss()
+        if (::mMultiListDialog.isInitialized && mMultiListDialog.isShowing) mMultiListDialog.dismiss()
     }
 
     companion object {

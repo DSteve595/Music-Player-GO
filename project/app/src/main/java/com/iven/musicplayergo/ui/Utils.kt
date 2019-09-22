@@ -13,13 +13,13 @@ import java.util.*
 object Utils {
 
     @JvmStatic
-    fun makeUnknownErrorToast(context: Context, message: Int) {
-        val errorColor = ThemeHelper.getColor(context, R.color.red, R.color.red)
+    fun makeToast(context: Context, message: Int, icon: Int, color: Int) {
+        val errorColor = ThemeHelper.getColor(context, color, color)
         val tintColor = if (ThemeHelper.isThemeNight()) Color.BLACK else Color.WHITE
         DynamicToast.make(
             context,
             context.getString(message),
-            context.getDrawable(R.drawable.ic_error),
+            context.getDrawable(icon),
             tintColor,
             errorColor
         )
@@ -92,7 +92,6 @@ object Utils {
                 Collections.sort(list, String.CASE_INSENSITIVE_ORDER)
                 list.asReversed()
             }
-
             else -> defaultList
         }
     }
@@ -105,7 +104,15 @@ object Utils {
     }
 
     @JvmStatic
-    fun removeHiddenItems(newItems: Set<String>) {
-        musicPlayerGoExAppPreferences.hiddenItems = newItems
+    fun removeFromHiddenItems(item: String) {
+        val hiddenArtistsFolders = musicPlayerGoExAppPreferences.hiddenItems?.toMutableList()
+        hiddenArtistsFolders?.remove(item)
+        musicPlayerGoExAppPreferences.hiddenItems = hiddenArtistsFolders?.toSet()
+    }
+
+    @JvmStatic
+    fun removeCheckableItems(newCheckableItems: Set<String>, isHiddenItemsDialog: Boolean) {
+        if (isHiddenItemsDialog) musicPlayerGoExAppPreferences.hiddenItems = newCheckableItems
+        else musicPlayerGoExAppPreferences.activeFragments = newCheckableItems
     }
 }
