@@ -14,17 +14,13 @@
   ~ limitations under the License.
   -->
 
-<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
-        app:title="@string/category_appearance">
+    <PreferenceCategory app:title="@string/category_appearance">
 
-        <ListPreference
-            app:defaultValue="@string/theme_pref_light"
+        <Preference
             app:dialogTitle="@string/theme_pref_title"
-            app:entries="@array/themeListArray"
-            app:entryValues="@array/themeEntryArray"
             app:key="@string/theme_pref"
             app:title="@string/theme_pref_title"
             app:useSimpleSummaryProvider="true" />
@@ -35,8 +31,7 @@
             app:title="@string/accent_pref_title" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="@string/category_general">
+    <PreferenceCategory app:title="@string/category_general">
 
         <Preference
             app:dialogTitle="@string/active_fragments_pref_title"
@@ -44,20 +39,20 @@
             app:title="@string/active_fragments_pref_title" />
 
         <SwitchPreference
+            android:summaryOff="@string/fast_scroll_pref_summary_off"
             app:defaultValue="true"
             app:dialogTitle="@string/fast_scroll_pref_title"
             app:key="@string/fast_scroll_pref"
-            app:title="@string/fast_scroll_pref_title"
             app:summaryOn="@string/fast_scroll_pref_summary_on"
-            android:summaryOff="@string/fast_scroll_pref_summary_off"/>
+            app:title="@string/fast_scroll_pref_title" />
 
         <SwitchPreference
+            android:summaryOff="@string/search_bar_pref_summary_off"
             app:defaultValue="true"
             app:dialogTitle="@string/search_bar_pref_title"
             app:key="@string/search_bar_pref"
-            app:title="@string/search_bar_pref_title"
             app:summaryOn="@string/search_bar_pref_summary_on"
-            android:summaryOff="@string/search_bar_pref_summary_off"/>
+            app:title="@string/search_bar_pref_title" />
 
         <Preference
             app:key="@string/hidden_items_pref"

@@ -2,7 +2,9 @@ package com.iven.musicplayergo.fragments
 
 import android.content.Context
 import android.os.Bundle
-import androidx.preference.*
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.getRecyclerView
@@ -12,6 +14,7 @@ import com.iven.musicplayergo.ui.*
 
 class PreferencesFragment : PreferenceFragmentCompat() {
 
+    private lateinit var mThemesDialog: MaterialDialog
     private lateinit var mAccentsDialog: MaterialDialog
     private lateinit var mMultiListDialog: MaterialDialog
 
@@ -37,12 +40,15 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
         if (activity != null) {
-            val themePreference = findPreference<ListPreference>("theme_pref")
-            themePreference?.setOnPreferenceChangeListener { _, newValue ->
-                val themeOption = newValue as String
-                ThemeHelper.applyTheme(activity!!, themeOption)
-                return@setOnPreferenceChangeListener true
+            val themePreference = findPreference<Preference>("theme_pref")
+
+            themePreference?.setOnPreferenceClickListener {
+                showThemesDialog()
+                return@setOnPreferenceClickListener true
             }
+
+            themePreference?.summary =
+                ThemeHelper.getAppliedThemeName(activity!!, musicPlayerGoExAppPreferences.theme)
 
             val accentPreference = findPreference<Preference>("accent_pref")
             accentPreference?.summary = String.format(
@@ -51,7 +57,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             )
 
             accentPreference?.setOnPreferenceClickListener {
-                showAccentDialog(it)
+                showAccentDialog()
                 return@setOnPreferenceClickListener true
             }
 
@@ -60,20 +66,6 @@ class PreferencesFragment : PreferenceFragmentCompat() {
             activeTabsPreference?.setOnPreferenceClickListener {
                 showActiveFragmentsDialog()
                 return@setOnPreferenceClickListener true
-            }
-
-            activeTabsPreference?.setOnPreferenceChangeListener { preference, newValue ->
-                if (preference.key == "3") {
-                    val checkBoxPreference = preference as CheckBoxPreference
-                    checkBoxPreference.isChecked = true
-                    Utils.makeToast(
-                        activity!!,
-                        R.string.active_fragments_pref,
-                        R.drawable.ic_error,
-                        R.color.red
-                    )
-                }
-                return@setOnPreferenceChangeListener true
             }
 
             val searchBarPreference = findPreference<SwitchPreference>("search_bar_pref")
@@ -96,12 +88,24 @@ class PreferencesFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun showAccentDialog(accentPreference: Preference) {
+    private fun showThemesDialog() {
+        if (activity != null) {
+            mThemesDialog = MaterialDialog(activity!!).show {
+
+                cornerRadius(res = R.dimen.md_radius)
+                title(R.string.theme_pref_title)
+
+                customListAdapter(ThemesAdapter(activity!!))
+            }
+        }
+    }
+
+    private fun showAccentDialog() {
         if (activity != null) {
             mAccentsDialog = MaterialDialog(activity!!).show {
 
                 cornerRadius(res = R.dimen.md_radius)
-                title(text = accentPreference.title.toString())
+                title(R.string.accent_pref_title)
 
                 customListAdapter(AccentsAdapter(activity!!))
                 getRecyclerView().scrollToPosition(
@@ -155,6 +159,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onPause() {
         super.onPause()
+        if (::mThemesDialog.isInitialized && mThemesDialog.isShowing) mThemesDialog.dismiss()
         if (::mAccentsDialog.isInitialized && mAccentsDialog.isShowing) mAccentsDialog.dismiss()
         if (::mMultiListDialog.isInitialized && mMultiListDialog.isShowing) mMultiListDialog.dismiss()
     }
