@@ -53,7 +53,7 @@ class HiddenItemsAdapter :
 
             itemView.setOnClickListener {
                 checkBox.isChecked = !checkBox.isChecked
-                if (checkBox.isChecked) mHiddenItems.remove(item) else mHiddenItems.add(item)
+                if (!checkBox.isChecked) mHiddenItems.remove(item) else mHiddenItems.add(item)
             }
         }
     }
