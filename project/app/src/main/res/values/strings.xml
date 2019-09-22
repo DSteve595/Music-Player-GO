@@ -1,5 +1,8 @@
 <resources>
+
     <string name="app_name" translatable="false">Music Player GO EX</string>
+    <string name="space_delimiter" translatable="false">&#160;</string>
+    <string name="underscore_delimiter" translatable="false">&#95;</string>
 
     <!-- Fragments titles -->
     <string name="artists">Artists</string>
@@ -14,6 +17,7 @@
     <string name="error_unknown">Something went wrong! :(</string>
     <string name="unknown_year" translatable="false">N&#x2F;A</string>
     <string name="error_no_music">No music found on your phone!</string>
+    <string name="error_get_resource">Oops!! Not found!</string>
 
     <!-- UI titles -->
     <string name="artist_and_album">%1s&#160;-&#160;%2s</string>

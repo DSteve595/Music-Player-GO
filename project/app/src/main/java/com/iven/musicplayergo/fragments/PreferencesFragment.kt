@@ -15,7 +15,7 @@ class PreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var mAccentsDialog: MaterialDialog
     private lateinit var mMultiListDialog: MaterialDialog
 
-    private var mSelectedAccent = R.color.deepPurple
+    private var mSelectedAccent = R.color.deep_purple
 
     private lateinit var mUIControlInterface: UIControlInterface
 

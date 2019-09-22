@@ -20,8 +20,8 @@
     </style>
 
     <style name="BaseTheme.DeepPurple" parent="BaseTheme">
-        <item name="colorAccent">@color/deepPurple</item>
-        <item name="colorPrimary">@color/deepPurple</item>
+        <item name="colorAccent">@color/deep_purple</item>
+        <item name="colorPrimary">@color/deep_purple</item>
         <item name="colorPrimaryDark">@color/deepPurplePrimaryDark</item>
     </style>
 
@@ -38,8 +38,8 @@
     </style>
 
     <style name="BaseTheme.LightBlue" parent="BaseTheme">
-        <item name="colorAccent">@color/lightBlue</item>
-        <item name="colorPrimary">@color/lightBlue</item>
+        <item name="colorAccent">@color/light_blue</item>
+        <item name="colorPrimary">@color/light_blue</item>
         <item name="colorPrimaryDark">@color/lightBluePrimaryDark</item>
     </style>
 
@@ -62,8 +62,8 @@
     </style>
 
     <style name="BaseTheme.LightGreen" parent="BaseTheme">
-        <item name="colorAccent">@color/lightGreen</item>
-        <item name="colorPrimary">@color/lightGreen</item>
+        <item name="colorAccent">@color/light_green</item>
+        <item name="colorPrimary">@color/light_green</item>
         <item name="colorPrimaryDark">@color/lightGreenPrimaryDark</item>
     </style>
 
@@ -92,7 +92,7 @@
     </style>
 
     <style name="BaseTheme.DeepOrange" parent="BaseTheme">
-        <item name="colorAccent">@color/deepOrange</item>
+        <item name="colorAccent">@color/deep_orange</item>
         <item name="colorPrimary">@color/deepOrangePrimaryDark</item>
     </style>
 
@@ -109,8 +109,8 @@
     </style>
 
     <style name="BaseTheme.BlueGrey" parent="BaseTheme">
-        <item name="colorAccent">@color/blueGrey</item>
-        <item name="colorPrimary">@color/blueGrey</item>
+        <item name="colorAccent">@color/blue_grey</item>
+        <item name="colorPrimary">@color/blue_grey</item>
         <item name="colorPrimaryDark">@color/blueGreyPrimaryDark</item>
     </style>
 </resources>

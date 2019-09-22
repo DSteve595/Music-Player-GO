@@ -1,10 +1,13 @@
 package com.iven.musicplayergo.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.recyclerview.widget.RecyclerView
 import com.iven.musicplayergo.R
 import com.iven.musicplayergo.musicPlayerGoExAppPreferences
@@ -12,7 +15,7 @@ import com.iven.musicplayergo.musicPlayerGoExAppPreferences
 class AccentsAdapter(private val activity: Activity) :
     RecyclerView.Adapter<AccentsAdapter.AccentsHolder>() {
 
-    private var mSelectedAccent = R.color.deepPurple
+    private var mSelectedAccent = R.color.deep_purple
 
     init {
         mSelectedAccent = musicPlayerGoExAppPreferences.accent
@@ -40,29 +43,51 @@ class AccentsAdapter(private val activity: Activity) :
 
         fun bindItems(color: Int) {
 
-            val colorOption = itemView as ImageView
-            val drawable = if (color != mSelectedAccent) 0
-            else
-                R.drawable.ic_check
+            val title = itemView.findViewById<TextView>(R.id.title)
+            title.text = getResourceName(color)
+            title.isSelected = true
 
-            val colorFromInt = ThemeHelper.getColor(activity, color, R.color.deepPurple)
-            itemView.setBackgroundColor(colorFromInt)
+            val radioButton = itemView.findViewById<AppCompatRadioButton>(R.id.radiobutton)
 
-            colorOption.setImageResource(drawable)
+            val accent = ThemeHelper.getColor(activity, color, R.color.deep_purple)
+            radioButton.isChecked = color == mSelectedAccent
+
+            val widgetColor = ColorStateList(
+                arrayOf(
+                    intArrayOf(android.R.attr.state_enabled), //enabled
+                    intArrayOf(android.R.attr.state_enabled) //disabled
+                ),
+                intArrayOf(accent, accent)
+            )
+
+            title.setTextColor(widgetColor)
+            radioButton.buttonTintList = widgetColor
 
             itemView.setOnClickListener {
 
                 if (ThemeHelper.accents[adapterPosition].first != mSelectedAccent) {
 
-                    notifyItemChanged(ThemeHelper.getAccent(mSelectedAccent).second)
-
                     mSelectedAccent = ThemeHelper.accents[adapterPosition].first
-                    colorOption.setImageResource(R.drawable.ic_check)
                     musicPlayerGoExAppPreferences.accent = mSelectedAccent
 
                     ThemeHelper.applyNewThemeSmoothly(activity)
                 }
             }
+        }
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun getResourceName(res: Int): String {
+        return try {
+            activity.resources.getResourceEntryName(res)
+                .replace(
+                    activity.getString(R.string.underscore_delimiter),
+                    activity.getString(R.string.space_delimiter)
+                ).capitalize()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Utils.makeToast(activity, R.string.error_get_resource, R.drawable.ic_error, R.color.red)
+            ""
         }
     }
 }

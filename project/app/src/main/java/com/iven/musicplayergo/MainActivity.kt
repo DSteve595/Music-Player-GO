@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<View>
 
     private lateinit var mTheme: String
-    private var mAccent = R.color.deepPurple
+    private var mAccent = R.color.deep_purple
 
     // music shit related
     private val mMusicViewModel: MusicViewModel by lazy {
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
 
         val mainActivity = main_activity
 
-        val accent = ThemeHelper.getColor(this, mAccent, R.color.deepPurple)
+        val accent = ThemeHelper.getColor(this, mAccent, R.color.deep_purple)
         mainActivity.setBackgroundColor(
             if (ThemeHelper.isThemeNight())
                 ThemeHelper.darkenColor(accent, 0.90F) else ThemeHelper.lightenColor(accent, 0.95F)
@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
                         year.text = item.year
                         if (mSelectedAlbum != item.title) albumCard.strokeColor =
                             Color.TRANSPARENT else albumCard.strokeColor =
-                            ThemeHelper.getColor(this@MainActivity, mAccent, R.color.deepPurple)
+                            ThemeHelper.getColor(this@MainActivity, mAccent, R.color.deep_purple)
                     }
 
                     onClick { index ->

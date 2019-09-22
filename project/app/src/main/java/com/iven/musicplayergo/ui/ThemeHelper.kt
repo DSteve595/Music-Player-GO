@@ -64,22 +64,22 @@ object ThemeHelper {
         Pair(R.color.red, R.style.BaseTheme_Red),
         Pair(R.color.pink, R.style.BaseTheme_Pink),
         Pair(R.color.purple, R.style.BaseTheme_Purple),
-        Pair(R.color.deepPurple, R.style.BaseTheme_DeepPurple),
+        Pair(R.color.deep_purple, R.style.BaseTheme_DeepPurple),
         Pair(R.color.indigo, R.style.BaseTheme_Indigo),
         Pair(R.color.blue, R.style.BaseTheme_Blue),
-        Pair(R.color.lightBlue, R.style.BaseTheme_LightBlue),
+        Pair(R.color.light_blue, R.style.BaseTheme_LightBlue),
         Pair(R.color.cyan, R.style.BaseTheme_Cyan),
         Pair(R.color.teal, R.style.BaseTheme_Teal),
         Pair(R.color.green, R.style.BaseTheme_Green),
-        Pair(R.color.lightGreen, R.style.BaseTheme_LightGreen),
+        Pair(R.color.light_green, R.style.BaseTheme_LightGreen),
         Pair(R.color.lime, R.style.BaseTheme_Lime),
         Pair(R.color.yellow, R.style.BaseTheme_Yellow),
         Pair(R.color.amber, R.style.BaseTheme_Amber),
         Pair(R.color.orange, R.style.BaseTheme_Orange),
-        Pair(R.color.deepOrange, R.style.BaseTheme_DeepOrange),
+        Pair(R.color.deep_orange, R.style.BaseTheme_DeepOrange),
         Pair(R.color.brown, R.style.BaseTheme_Brown),
         Pair(R.color.grey, R.style.BaseTheme_Grey),
-        Pair(R.color.blueGrey, R.style.BaseTheme_BlueGrey)
+        Pair(R.color.blue_grey, R.style.BaseTheme_BlueGrey)
     )
 
     //finds theme and its position in accents array and returns a pair(theme, position)

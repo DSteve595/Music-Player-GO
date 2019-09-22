@@ -26,7 +26,7 @@ class MusicPlayerGoExPreferences(context: Context) {
         set(value) = mPrefs.edit().putString(prefsTheme, value).apply()
 
     var accent: Int
-        get() = mPrefs.getInt(prefsAccent, R.color.deepPurple)
+        get() = mPrefs.getInt(prefsAccent, R.color.deep_purple)
         set(value) = mPrefs.edit().putInt(prefsAccent, value).apply()
 
     var activeFragments: Set<String>?
