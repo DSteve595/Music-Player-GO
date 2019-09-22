@@ -2,6 +2,7 @@ package com.iven.musicplayergo.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.iven.musicplayergo.music.MusicUtils
 import com.iven.musicplayergo.musicLibrary
 import com.iven.musicplayergo.musicPlayerGoExAppPreferences
 import com.iven.musicplayergo.ui.GenericViewHolder
+import com.iven.musicplayergo.ui.ThemeHelper
 import com.iven.musicplayergo.ui.UIControlInterface
 import com.iven.musicplayergo.ui.Utils
 import com.reddit.indicatorfastscroll.FastScrollItemIndicator
@@ -142,6 +144,11 @@ class ArtistsFragment : Fragment() {
                 withSwipeAction(SwipeLocation.RIGHT, SwipeLocation.LEFT) {
                     icon(R.drawable.ic_hide)
                     color(R.color.red)
+                    text(
+                        res = R.string.hidden_items_pref_hide,
+                        typefaceRes = R.font.raleway_black,
+                        color = if (ThemeHelper.isThemeNight()) android.R.color.black else android.R.color.white
+                    )
                     callback { _, item ->
                         mArtists.remove(item)
                         Utils.addToHiddenItems(item.toString())

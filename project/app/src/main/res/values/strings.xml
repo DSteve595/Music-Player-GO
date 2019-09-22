@@ -56,6 +56,7 @@
 
     <string name="hidden_items_pref" translatable="false">hidden_items_pref</string>
     <string name="hidden_items_pref_title">Hidden items</string>
+    <string name="hidden_items_pref_hide">Hide me!!</string>
     <string name="hidden_items_pref_wipe">Wipe</string>
     <string name="hidden_items_pref_empty">No hidden items found!</string>
 
