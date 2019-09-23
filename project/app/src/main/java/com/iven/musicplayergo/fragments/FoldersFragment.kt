@@ -11,15 +11,11 @@ import androidx.fragment.app.Fragment
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
-import com.afollestad.recyclical.swipe.SwipeLocation
-import com.afollestad.recyclical.swipe.withSwipeAction
 import com.afollestad.recyclical.withItem
-import com.google.android.material.snackbar.Snackbar
 import com.iven.musicplayergo.R
 import com.iven.musicplayergo.musicLibrary
 import com.iven.musicplayergo.musicPlayerGoExAppPreferences
 import com.iven.musicplayergo.ui.GenericViewHolder
-import com.iven.musicplayergo.ui.ThemeHelper
 import com.iven.musicplayergo.ui.UIControlInterface
 import com.iven.musicplayergo.ui.Utils
 import kotlinx.android.synthetic.main.fragment_folders.*
@@ -108,35 +104,14 @@ class FoldersFragment : Fragment() {
                             }
                         }
                     }
-                }
-
-                withSwipeAction(SwipeLocation.RIGHT, SwipeLocation.LEFT) {
-                    icon(R.drawable.ic_hide)
-                    color(R.color.red)
-                    text(
-                        res = R.string.hidden_items_pref_hide,
-                        typefaceRes = R.font.raleway_black,
-                        color = if (ThemeHelper.isThemeNight()) android.R.color.black else android.R.color.white
-                    )
-
-                    callback { index, item ->
-
-                        val hiddenItem = item.toString()
-
-                        mFolders.remove(hiddenItem)
-                        Utils.addToHiddenItems(hiddenItem)
-
-                        Snackbar.make(
-                            context_view,
-                            getString(R.string.hidden_item_pref_result, hiddenItem),
-                            Snackbar.LENGTH_LONG
-                        ).setAction(R.string.hidden_items_pref_undo) {
-                            mFolders.add(index, hiddenItem)
-                            mDataSource.set(mFolders)
-                            Utils.removeFromHiddenItems(hiddenItem)
-                        }.show()
-
-                        true
+                    onLongClick { index ->
+                        Utils.makeHideItemDialog(
+                            activity!!,
+                            Pair(index, item),
+                            mFolders,
+                            mDataSource,
+                            context_view
+                        )
                     }
                 }
             }

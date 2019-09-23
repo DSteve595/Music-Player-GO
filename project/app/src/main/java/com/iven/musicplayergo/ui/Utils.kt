@@ -3,8 +3,11 @@ package com.iven.musicplayergo.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.view.View
 import androidx.appcompat.widget.SearchView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.recyclical.datasource.DataSource
+import com.google.android.material.snackbar.Snackbar
 import com.iven.musicplayergo.R
 import com.iven.musicplayergo.musicPlayerGoExAppPreferences
 import com.pranavpandey.android.dynamic.toasts.DynamicToast
@@ -108,6 +111,40 @@ object Utils {
         val hiddenArtistsFolders = musicPlayerGoExAppPreferences.hiddenItems?.toMutableList()
         hiddenArtistsFolders?.remove(item)
         musicPlayerGoExAppPreferences.hiddenItems = hiddenArtistsFolders?.toSet()
+    }
+
+    @JvmStatic
+    fun makeHideItemDialog(
+        context: Context,
+        item: Pair<Int, String>,
+        stringsList: MutableList<String>,
+        dataSource: DataSource<Any>,
+        snackBarContextView: View
+    ): MaterialDialog {
+
+        return MaterialDialog(context).show {
+
+            cornerRadius(res = R.dimen.md_radius)
+            title(text = item.second)
+            message(text = context.getString(R.string.hidden_items_pref_message, item.second))
+            positiveButton {
+
+                stringsList.remove(item.second)
+                dataSource.set(stringsList)
+                addToHiddenItems(item.second)
+
+                Snackbar.make(
+                    snackBarContextView,
+                    context.getString(R.string.hidden_item_pref_result, item.second),
+                    Snackbar.LENGTH_LONG
+                ).setAction(R.string.hidden_items_pref_undo) {
+                    stringsList.add(item.first, item.second)
+                    dataSource.set(stringsList)
+                    removeFromHiddenItems(item.second)
+                }.show()
+            }
+            negativeButton {}
+        }
     }
 
     @JvmStatic

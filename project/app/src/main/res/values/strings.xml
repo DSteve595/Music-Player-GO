@@ -64,7 +64,7 @@
 
     <string name="hidden_items_pref" translatable="false">hidden_items_pref</string>
     <string name="hidden_items_pref_title">Hidden items</string>
-    <string name="hidden_items_pref_hide">Hide me!!</string>
+    <string name="hidden_items_pref_message">%1s will be hidden. Are you sure?</string>
     <string name="hidden_item_pref_result">%1s has been hidden!</string>
     <string name="hidden_items_pref_undo">Undo</string>
     <string name="hidden_items_pref_wipe">Wipe</string>
