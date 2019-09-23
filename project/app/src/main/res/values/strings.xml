@@ -67,7 +67,6 @@
     <string name="hidden_items_pref_message">%1s will be hidden. Are you sure?</string>
     <string name="hidden_item_pref_result">%1s has been hidden!</string>
     <string name="hidden_items_pref_undo">Undo</string>
-    <string name="hidden_items_pref_wipe">Wipe</string>
     <string name="hidden_items_pref_empty">No hidden items found!</string>
 
     <string name="hex" translatable="false">&#35;%06X</string>
