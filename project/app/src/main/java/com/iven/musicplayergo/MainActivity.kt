@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
     private lateinit var mCoverView: View
     private lateinit var mBottomSheetBehavior: BottomSheetBehavior<View>
 
-    private lateinit var mTheme: String
     private var mAccent = R.color.deep_purple
 
     // music shit related
@@ -68,12 +67,15 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
     private lateinit var mSelectedAlbum: String
     private lateinit var mAlbumSongsDataSource: DataSource<Any>
 
+    override fun onStart() {
+        super.onStart()
+        ThemeHelper.applyTheme(this, musicPlayerGoExAppPreferences.theme!!)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        mTheme = musicPlayerGoExAppPreferences.theme!!
         mAccent = musicPlayerGoExAppPreferences.accent
 
-        ThemeHelper.applyTheme(this, mTheme)
         setTheme(ThemeHelper.getAccent(mAccent).first)
 
         mFragmentManager = supportFragmentManager
