@@ -129,7 +129,6 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
                     R.drawable.ic_error,
                     R.color.red
                 )
-                dismiss()
                 finishAndRemoveTask()
             }
         }
