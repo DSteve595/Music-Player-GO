@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.iven.musicplayergo.R
 import com.iven.musicplayergo.musicPlayerGoExAppPreferences
+import java.util.*
 
 class CheckableAdapter(
     private val context: Context,
@@ -20,7 +21,7 @@ class CheckableAdapter(
     private val mItemsToRemove = mutableListOf<String>()
 
     private val mCheckableItems = if (isHiddenItemsDialog) {
-        listItems.sort()
+        Collections.sort(listItems, String.CASE_INSENSITIVE_ORDER)
         listItems
     } else {
         musicPlayerGoExAppPreferences.activeFragments!!.toMutableList()
