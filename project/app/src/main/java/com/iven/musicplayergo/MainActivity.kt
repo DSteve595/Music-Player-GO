@@ -365,6 +365,7 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
     }
 
     override fun onVisibleItemsUpdated() {
-        if (::mFoldersFragment.isInitialized) mFoldersFragment.updateFolders()
+        if (::mFoldersFragment.isInitialized && mFoldersFragment.isAdded) mFoldersFragment.updateFoldersList()
+        if (::mArtistsFragment.isInitialized && mArtistsFragment.isAdded) mArtistsFragment.updateArtistsList()
     }
 }

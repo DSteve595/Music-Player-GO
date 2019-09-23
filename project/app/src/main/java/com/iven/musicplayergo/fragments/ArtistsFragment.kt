@@ -91,15 +91,7 @@ class ArtistsFragment : Fragment() {
 
             mArtistsRecyclerView = artists_rv
 
-            mArtists = Utils.getSortedList(
-                musicPlayerGoExAppPreferences.artistsSorting,
-                musicLibrary.allCategorizedMusic.keys.toMutableList(),
-                musicLibrary.allCategorizedMusic.keys.toMutableList()
-            )
-
-            musicPlayerGoExAppPreferences.hiddenItems?.iterator()?.forEach {
-                if (mArtists.contains(it)) mArtists.remove(it)
-            }
+            setupFilteredArtists()
 
             mDataSource = dataSourceOf(mArtists)
 
@@ -259,6 +251,25 @@ class ArtistsFragment : Fragment() {
             musicPlayerGoExAppPreferences.artistsSorting = it.itemId
 
             return@setOnMenuItemClickListener true
+        }
+    }
+
+    fun updateArtistsList() {
+        if (::mDataSource.isInitialized) {
+            setupFilteredArtists()
+            mDataSource.set(mArtists)
+        }
+    }
+
+    private fun setupFilteredArtists() {
+        mArtists = Utils.getSortedList(
+            musicPlayerGoExAppPreferences.artistsSorting,
+            musicLibrary.allCategorizedMusic.keys.toMutableList(),
+            musicLibrary.allCategorizedMusic.keys.toMutableList()
+        )
+
+        musicPlayerGoExAppPreferences.hiddenItems?.iterator()?.forEach {
+            if (mArtists.contains(it)) mArtists.remove(it)
         }
     }
 

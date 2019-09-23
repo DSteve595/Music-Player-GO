@@ -172,7 +172,7 @@ class FoldersFragment : Fragment() {
         }
     }
 
-    fun updateFolders() {
+    fun updateFoldersList() {
         if (::mDataSource.isInitialized) {
             setupFilteredFolders()
             mDataSource.set(mFolders)
@@ -180,7 +180,6 @@ class FoldersFragment : Fragment() {
     }
 
     private fun setupFilteredFolders() {
-
         mFolders = Utils.getSortedList(
             musicPlayerGoExAppPreferences.foldersSorting,
             musicLibrary.allCategorizedMusicByFolder.keys.toMutableList(),
