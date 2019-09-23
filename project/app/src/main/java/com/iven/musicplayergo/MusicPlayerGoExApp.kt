@@ -19,6 +19,7 @@ class MusicPlayerGoExApp : Application() {
 
     override fun onCreate() {
         prefs = MusicPlayerGoExPreferences(applicationContext)
+
         musicLibrary = MusicLibrary()
         super.onCreate()
     }
