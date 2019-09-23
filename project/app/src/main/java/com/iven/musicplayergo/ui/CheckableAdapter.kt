@@ -17,6 +17,8 @@ class CheckableAdapter(
 ) :
     RecyclerView.Adapter<CheckableAdapter.HiddenItemsHolder>() {
 
+    private val mItemsToRemove = mutableListOf<String>()
+
     private val mCheckableItems = if (isHiddenItemsDialog) {
         listItems.sort()
         listItems
@@ -25,6 +27,7 @@ class CheckableAdapter(
     }
 
     fun getUpdatedItems(): Set<String> {
+        mCheckableItems.removeAll(mItemsToRemove.toSet())
         return mCheckableItems.toSet()
     }
 
@@ -66,9 +69,11 @@ class CheckableAdapter(
             itemView.setOnClickListener {
                 checkBox.isChecked = !checkBox.isChecked
                 if (isHiddenItemsDialog) {
-                    if (!checkBox.isChecked) mCheckableItems.remove(item) else mCheckableItems.add(
-                        item
-                    )
+                    if (!checkBox.isChecked) {
+                        mItemsToRemove.add(item)
+                    } else {
+                        if (mItemsToRemove.contains(item)) mItemsToRemove.remove(item)
+                    }
                 } else {
                     if (!checkBox.isChecked) mCheckableItems.remove(adapterPosition.toString()) else mCheckableItems.add(
                         adapterPosition.toString()
