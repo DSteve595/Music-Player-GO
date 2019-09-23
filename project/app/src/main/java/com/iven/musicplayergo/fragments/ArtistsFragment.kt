@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.recyclical.datasource.DataSource
@@ -210,7 +211,9 @@ class ArtistsFragment : Fragment() {
                         indicatorCenterY: Int,
                         itemPosition: Int
                     ) {
-                        mArtistsRecyclerView.scrollToPosition(itemPosition)
+                        val artistsLayoutManager =
+                            mArtistsRecyclerView.layoutManager as LinearLayoutManager
+                        artistsLayoutManager.scrollToPositionWithOffset(itemPosition, 0)
                     }
                 }
 
