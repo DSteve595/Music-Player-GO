@@ -39,7 +39,7 @@ import kotlinx.android.synthetic.main.songs_sheet.*
 
 class MainActivity : AppCompatActivity(), UIControlInterface {
 
-    //default
+    //fragments
     private lateinit var mArtistsFragment: ArtistsFragment
 
     private lateinit var mAllMusicFragment: AllMusicFragment
@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
 
     private lateinit var mFragmentsNumbersToAdd: MutableList<String>
 
+    //views
     private lateinit var mPager: ViewPager
     private lateinit var mTabLayout: TabLayout
 

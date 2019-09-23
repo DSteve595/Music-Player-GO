@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -29,13 +30,19 @@ import java.io.File
  */
 class FoldersFragment : Fragment() {
 
-    private lateinit var mUIControlInterface: UIControlInterface
+    private lateinit var mSearchToolbar: Toolbar
+    private lateinit var mHideItemDialog: MaterialDialog
 
     private lateinit var mFolders: MutableList<String>
     private lateinit var mDataSource: DataSource<Any>
     private var mSelectedFolder = ""
 
-    private lateinit var mSearchToolbar: Toolbar
+    private lateinit var mUIControlInterface: UIControlInterface
+
+    override fun onPause() {
+        super.onPause()
+        if (::mHideItemDialog.isInitialized && mHideItemDialog.isShowing) mHideItemDialog.dismiss()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -105,7 +112,7 @@ class FoldersFragment : Fragment() {
                         }
                     }
                     onLongClick { index ->
-                        Utils.makeHideItemDialog(
+                        mHideItemDialog = Utils.makeHideItemDialog(
                             activity!!,
                             Pair(index, item),
                             mFolders,

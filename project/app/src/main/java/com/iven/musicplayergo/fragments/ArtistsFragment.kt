@@ -12,6 +12,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.recyclical.datasource.DataSource
 import com.afollestad.recyclical.datasource.dataSourceOf
 import com.afollestad.recyclical.setup
@@ -39,6 +40,7 @@ class ArtistsFragment : Fragment() {
     //views
     private lateinit var mArtistsRecyclerView: RecyclerView
     private lateinit var mSearchToolbar: Toolbar
+    private lateinit var mHideItemDialog: MaterialDialog
 
     //indicator fast scroller by reddit
     private lateinit var mIndicatorFastScrollerView: FastScrollerView
@@ -49,6 +51,11 @@ class ArtistsFragment : Fragment() {
     private var mSelectedArtist = ""
 
     private lateinit var mUIControlInterface: UIControlInterface
+
+    override fun onPause() {
+        super.onPause()
+        if (::mHideItemDialog.isInitialized && mHideItemDialog.isShowing) mHideItemDialog.dismiss()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -124,7 +131,7 @@ class ArtistsFragment : Fragment() {
                         }
                     }
                     onLongClick { index ->
-                        Utils.makeHideItemDialog(
+                        mHideItemDialog = Utils.makeHideItemDialog(
                             activity!!,
                             Pair(index, item),
                             mArtists,
