@@ -37,6 +37,7 @@ import com.iven.musicplayergo.ui.*
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.songs_sheet.*
 
+
 class MainActivity : AppCompatActivity(), UIControlInterface {
 
     //fragments
@@ -67,6 +68,14 @@ class MainActivity : AppCompatActivity(), UIControlInterface {
 
     private lateinit var mSelectedAlbum: String
     private lateinit var mAlbumSongsDataSource: DataSource<Any>
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus && musicPlayerGoExAppPreferences.isImmersive) ThemeHelper.goImmersive(
+            this,
+            hasFocus
+        )
+    }
 
     override fun onStart() {
         super.onStart()

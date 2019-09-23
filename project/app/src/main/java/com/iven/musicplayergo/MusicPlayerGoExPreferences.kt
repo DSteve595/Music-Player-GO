@@ -9,6 +9,7 @@ class MusicPlayerGoExPreferences(context: Context) {
     private val prefsTheme = context.getString(R.string.theme_pref)
     private val prefsThemeDefault = context.getString(R.string.theme_pref_light)
     private val prefsAccent = context.getString(R.string.accent_pref)
+    private val prefsImmersive = context.getString(R.string.immersive_pref)
     private val prefsActiveFragments = context.getString(R.string.active_fragments_pref)
     private val prefsActiveFragmentsDefault =
         context.resources.getStringArray(R.array.activeFragmentsEntryArray).toMutableSet()
@@ -28,6 +29,10 @@ class MusicPlayerGoExPreferences(context: Context) {
     var accent: Int
         get() = mPrefs.getInt(prefsAccent, R.color.deep_purple)
         set(value) = mPrefs.edit().putInt(prefsAccent, value).apply()
+
+    var isImmersive: Boolean
+        get() = mPrefs.getBoolean(prefsImmersive,false)
+        set(value) = mPrefs.edit().putBoolean(prefsImmersive, value).apply()
 
     var activeFragments: Set<String>?
         get() = mPrefs.getStringSet(prefsActiveFragments, prefsActiveFragmentsDefault)

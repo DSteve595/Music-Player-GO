@@ -61,6 +61,12 @@ class PreferencesFragment : PreferenceFragmentCompat() {
                 return@setOnPreferenceClickListener true
             }
 
+            val immersivePreference = findPreference<SwitchPreference>("immersive_pref")
+            immersivePreference?.setOnPreferenceChangeListener { _, _ ->
+                ThemeHelper.goImmersive(activity!!, false)
+                return@setOnPreferenceChangeListener true
+            }
+
             val activeTabsPreference = findPreference<Preference>("active_fragments_pref")
 
             activeTabsPreference?.setOnPreferenceClickListener {

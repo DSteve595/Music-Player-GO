@@ -42,6 +42,11 @@
     <string name="accent_pref" translatable="false">accent_pref</string>
     <string name="accent_pref_title">Accent</string>
 
+    <string name="immersive_pref" translatable="false">immersive_pref</string>
+    <string name="immersive_pref_title">Immersive mode</string>
+    <string name="immersive_pref_summary_on">Disable immersive mode</string>
+    <string name="immersive_pref_summary_off">Enable immersive mode</string>
+
     <string name="active_fragments_pref" translatable="false">active_fragments_pref</string>
     <string name="active_fragments_pref_title">Active tabs</string>
     <string name="active_fragments_pref_warning">You just can\'t remove all tabs! :P</string>
